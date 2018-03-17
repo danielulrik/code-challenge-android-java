@@ -30,7 +30,7 @@ public class HomeActivity extends BaseActivity {
 
         this.recyclerView = findViewById(R.id.recyclerView);
         this.progressBar = findViewById(R.id.progressBar);
-
+        // Move to viewModel
         api.upcomingMovies(TmdbApi.API_KEY, TmdbApi.DEFAULT_LANGUAGE, 1L, TmdbApi.DEFAULT_REGION)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
