@@ -4,6 +4,8 @@ import android.graphics.drawable.Drawable;
 
 import com.arctouch.codechallenge.model.Genre;
 import com.arctouch.codechallenge.model.Movie;
+import com.arctouch.codechallenge.util.MovieImageUrlBuilder;
+import com.bumptech.glide.Glide;
 
 import java.io.InputStream;
 import java.net.URL;
@@ -20,7 +22,7 @@ import io.reactivex.schedulers.Schedulers;
 
 public class MovieDetailsViewModel implements ViewModel {
 
-    private static final String BASE_URL_IMAGE = "http://image.tmdb.org/t/p/w185/";
+    private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();
     private Movie movie;
 
     public MovieDetailsViewModel(Movie movie) {
@@ -50,10 +52,14 @@ public class MovieDetailsViewModel implements ViewModel {
         return movie.releaseDate;
     }
 
+    public String getPosterUrl() {
+        return movieImageUrlBuilder.buildPosterUrl(movie.posterPath);
+    }
+
     public Observable<Drawable> getPoster() {
         return Observable.fromCallable(() -> {
             try {
-                InputStream is = (InputStream) new URL(BASE_URL_IMAGE.concat(movie.posterPath)).getContent();
+                InputStream is = (InputStream) new URL(movieImageUrlBuilder.buildPosterUrl(movie.posterPath)).getContent();
                 Drawable d = Drawable.createFromStream(is, "");
                 return d;
             } catch (Exception e) {
@@ -65,7 +71,7 @@ public class MovieDetailsViewModel implements ViewModel {
     public Observable<Drawable> getBackgroundDrop() {
         return Observable.fromCallable(() -> {
             try {
-                InputStream is = (InputStream) new URL(BASE_URL_IMAGE.concat(movie.backdropPath)).getContent();
+                InputStream is = (InputStream) new URL(movieImageUrlBuilder.buildBackdropUrl(movie.backdropPath)).getContent();
                 Drawable d = Drawable.createFromStream(is, "");
                 return d;
             } catch (Exception e) {
@@ -76,5 +82,9 @@ public class MovieDetailsViewModel implements ViewModel {
 
     @Override
     public void onResume() {
+    }
+
+    public String getBackdropUrl() {
+        return movieImageUrlBuilder.buildBackdropUrl(movie.backdropPath);
     }
 }

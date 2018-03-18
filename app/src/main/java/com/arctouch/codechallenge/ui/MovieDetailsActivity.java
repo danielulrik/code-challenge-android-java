@@ -1,30 +1,28 @@
 package com.arctouch.codechallenge.ui;
 
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.method.ScrollingMovementMethod;
 import android.view.MenuItem;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.viewmodel.MovieDetailsViewModel;
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.observers.DisposableObserver;
 
 public class MovieDetailsActivity extends AppCompatActivity {
 
-    @BindView(R.id.backgroundLinearLayout)
-    RelativeLayout backgroundLinearLayout;
+    @BindView(R.id.backDropImageView)
+    ImageView backDropImageView;
     @BindView(R.id.posterImageView)
     ImageView posterImageView;
     @BindView(R.id.movieTitleTextView)
@@ -56,8 +54,8 @@ public class MovieDetailsActivity extends AppCompatActivity {
     }
 
     private void loadDetails() {
-        compositeDisposable.add(loadPoster());
-        compositeDisposable.add(loadBackground());
+        loadPoster();
+        loadBackdrop();
         movieTitleTextView.setText(viewModel.getTitle());
         genresTextView.setText(viewModel.getGenres());
         overviewTextView.setText(viewModel.getOverview());
@@ -65,40 +63,18 @@ public class MovieDetailsActivity extends AppCompatActivity {
         releaseDateTextView.setText(viewModel.getReleaseDate());
     }
 
-    @NonNull
-    private DisposableObserver<Drawable> loadPoster() {
-        return viewModel.getPoster().subscribeWith(new DisposableObserver<Drawable>() {
-            @Override
-            public void onNext(Drawable drawable) {
-                posterImageView.setBackground(drawable);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
+    private void loadPoster() {
+        Glide.with(MovieDetailsActivity.this)
+                .load(viewModel.getPosterUrl())
+                .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
+                .into(posterImageView);
     }
 
-    @NonNull
-    private DisposableObserver<Drawable> loadBackground() {
-        return viewModel.getBackgroundDrop().subscribeWith(new DisposableObserver<Drawable>() {
-            @Override
-            public void onNext(Drawable drawable) {
-                backgroundLinearLayout.setBackground(drawable);
-            }
-
-            @Override
-            public void onError(Throwable e) {
-            }
-
-            @Override
-            public void onComplete() {
-            }
-        });
+    private void loadBackdrop() {
+        Glide.with(MovieDetailsActivity.this)
+                .load(viewModel.getBackdropUrl())
+                .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
+                .into(backDropImageView);
     }
 
     @Override
