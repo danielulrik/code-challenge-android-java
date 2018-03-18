@@ -1,4 +1,4 @@
-package com.arctouch.codechallenge.home;
+package com.arctouch.codechallenge.ui;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -22,7 +22,12 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     private List<Movie> movies;
 
     public HomeAdapter(List<Movie> movies) {
-        this.movies = movies;
+        // todo check if its ok
+        if (this.movies != null) {
+            this.movies.addAll(movies);
+        } else {
+            this.movies = movies;
+        }
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,7 +53,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             releaseDateTextView.setText(movie.releaseDate);
 
             String posterPath = movie.posterPath;
-            if (TextUtils.isEmpty(posterPath) == false) {
+            if (!TextUtils.isEmpty(posterPath)) {
                 Glide.with(itemView)
                         .load(movieImageUrlBuilder.buildPosterUrl(posterPath))
                         .apply(new RequestOptions().placeholder(R.drawable.ic_image_placeholder))
