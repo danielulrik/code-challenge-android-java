@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.model.Movie;
@@ -30,7 +31,6 @@ public class HomeActivity extends AppCompatActivity {
     @NonNull
     private UpcomingMoviesViewModel viewModel = new UpcomingMoviesViewModel();
     private DisposableObserver<List<Movie>> disposableObserver;
-    private int currentPage = 1;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -38,37 +38,26 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.home_activity);
         ButterKnife.bind(this);
         configRecycler();
-        loadUpcomingMoviews(currentPage);
+        loadUpcomingMoviews(1);
     }
 
     private void configRecycler() {
         final LinearLayoutManager manager = (LinearLayoutManager) recyclerView.getLayoutManager();
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+        recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(manager) {
             @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                int currentItems = manager.getChildCount();
-                int totalItems = manager.getItemCount();
-                int scrollOutItems = manager.findFirstVisibleItemPosition();
-
-                if (currentItems + scrollOutItems == totalItems) {
-                    // loadUpcomingMoviews(currentPage++);
-                }
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                Toast.makeText(getBaseContext(), "page. " + page, Toast.LENGTH_SHORT).show();
+                //loadUpcomingMoviews(page);
             }
         });
     }
 
     private void loadUpcomingMoviews(long page) {
-
         disposableObserver = viewModel.getUpcomingMovies(page).subscribeWith(new DisposableObserver<List<Movie>>() {
             HomeAdapter adapter;
             @Override
             public void onNext(List<Movie> movies) {
-                if (movies.isEmpty()) {
-                    currentPage = 1;
-                } else {
-                    recyclerView.setAdapter(adapter = new HomeAdapter(movies));
-                }
+                recyclerView.setAdapter(adapter = new HomeAdapter(movies));
             }
 
             @Override
