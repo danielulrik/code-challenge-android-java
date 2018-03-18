@@ -1,10 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:background="@android:color/black"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@android:color/black"
+    android:layout_height="wrap_content"
     tools:context="com.arctouch.codechallenge.ui.MovieDetailsActivity">
 
     <android.support.design.widget.AppBarLayout
@@ -76,7 +82,9 @@
         android:layout_alignStart="@+id/releaseDateTextView"
         android:layout_below="@+id/releaseDateTextView"
         android:layout_marginTop="20dp"
-        android:layout_toStartOf="@+id/genresTextView" />
+        android:layout_marginEnd="5dp"
+        android:layout_toStartOf="@+id/overviewTextView"
+        />
 
     <TextView
         android:textColor="@android:color/white"
@@ -93,3 +101,5 @@
 
 
 </RelativeLayout>
+
+</ScrollView>
