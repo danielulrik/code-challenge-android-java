@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/black"
+    tools:context="com.arctouch.codechallenge.ui.MovieDetailsActivity">
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay"
+        android:id="@+id/appBarLayout">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+    </android.support.design.widget.AppBarLayout>
+
+    <RelativeLayout
+        android:id="@+id/backgroundLinearLayout"
+        android:layout_below="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="170dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/movieTitleTextView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="8dp"
+            android:ellipsize="end"
+            android:maxLines="1"
+            android:textColor="@android:color/white"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            tools:text="Movie" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/releaseDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/backgroundLinearLayout"
+        android:layout_below="@+id/backgroundLinearLayout"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="10dp"
+        android:textSize="15sp"
+        tools:text="2018 03 18" />
+
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/genresTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/releaseDateTextView"
+        android:layout_marginStart="27dp"
+        android:layout_toEndOf="@+id/releaseDateTextView"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:textSize="15sp"
+        tools:text="Action, Adventure" />
+
+    <ImageView
+        android:id="@+id/posterImageView"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignStart="@+id/releaseDateTextView"
+        android:layout_below="@+id/releaseDateTextView"
+        android:layout_marginTop="20dp"
+        android:layout_toStartOf="@+id/genresTextView" />
+
+    <TextView
+        android:textColor="@android:color/white"
+        android:id="@+id/overviewTextView"
+        android:textSize="15sp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignStart="@+id/genresTextView"
+        android:layout_alignTop="@+id/posterImageView"
+        android:scrollbars = "vertical"
+        android:ellipsize="end"
+        android:maxLines="9"
+        tools:text="Overview" />
+
+
+</RelativeLayout>

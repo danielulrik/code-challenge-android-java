@@ -1,5 +1,6 @@
 package com.arctouch.codechallenge.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,20 +52,22 @@ public class HomeActivity extends AppCompatActivity {
                 int scrollOutItems = manager.findFirstVisibleItemPosition();
 
                 if (currentItems + scrollOutItems == totalItems) {
-                    loadUpcomingMoviews(currentPage++);
+                    // loadUpcomingMoviews(currentPage++);
                 }
             }
         });
     }
 
     private void loadUpcomingMoviews(long page) {
+
         disposableObserver = viewModel.getUpcomingMovies(page).subscribeWith(new DisposableObserver<List<Movie>>() {
+            HomeAdapter adapter;
             @Override
             public void onNext(List<Movie> movies) {
                 if (movies.isEmpty()) {
                     currentPage = 1;
                 } else {
-                    recyclerView.setAdapter(new HomeAdapter(movies));
+                    recyclerView.setAdapter(adapter = new HomeAdapter(movies));
                 }
             }
 
@@ -75,6 +78,10 @@ public class HomeActivity extends AppCompatActivity {
 
             @Override
             public void onComplete() {
+                adapter.setOnItemClicked(viewClicked -> {
+                    Movie movie = adapter.getItem(recyclerView.getChildLayoutPosition(viewClicked));
+                    goToMovieDetails(movie);
+                });
                 progressBar.setVisibility(View.GONE);
             }
         });
@@ -91,6 +98,14 @@ public class HomeActivity extends AppCompatActivity {
         super.onDestroy();
         if (disposableObserver != null && !disposableObserver.isDisposed()) {
             disposableObserver.dispose();
+        }
+    }
+
+    private void goToMovieDetails(Movie movie) {
+        if (movie != null) {
+            Intent intent = new Intent(this, MovieDetailsActivity.class);
+            intent.putExtra("movie", movie);
+            startActivity(intent);
         }
     }
 }

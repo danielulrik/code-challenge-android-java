@@ -1,6 +1,7 @@
 package com.arctouch.codechallenge.ui;
 
 import android.support.annotation.NonNull;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -19,15 +20,11 @@ import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
 
+    private OnItemClicked onItemClicked;
     private List<Movie> movies;
 
     public HomeAdapter(List<Movie> movies) {
-        // todo check if its ok
-        if (this.movies != null) {
-            this.movies.addAll(movies);
-        } else {
-            this.movies = movies;
-        }
+        this.movies = movies;
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -45,6 +42,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
             genresTextView = itemView.findViewById(R.id.genresTextView);
             releaseDateTextView = itemView.findViewById(R.id.releaseDateTextView);
             posterImageView = itemView.findViewById(R.id.posterImageView);
+
         }
 
         public void bind(Movie movie) {
@@ -66,6 +64,9 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.movie_item, parent, false);
+        view.setOnClickListener(viewClicked -> {
+            if (onItemClicked != null) onItemClicked.onClick(viewClicked);
+        });
         return new ViewHolder(view);
     }
 
@@ -77,5 +78,20 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.bind(movies.get(position));
+    }
+
+    public Movie getItem(int position) {
+        if (movies != null) {
+            return movies.get(position);
+        }
+        return null;
+    }
+
+    public void setOnItemClicked(OnItemClicked onItemClicked) {
+        this.onItemClicked = onItemClicked;
+    }
+
+    public interface OnItemClicked {
+        void onClick(View viewClicked);
     }
 }
