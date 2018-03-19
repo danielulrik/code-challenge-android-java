@@ -15,6 +15,8 @@ import com.arctouch.codechallenge.R;
 import com.arctouch.codechallenge.model.Movie;
 import com.arctouch.codechallenge.viewmodel.UpcomingMoviesViewModel;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,6 +33,7 @@ public class HomeActivity extends AppCompatActivity {
     @NonNull
     private UpcomingMoviesViewModel viewModel = new UpcomingMoviesViewModel();
     private DisposableObserver<List<Movie>> disposableObserver;
+    private HomeAdapter adapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,6 +42,8 @@ public class HomeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
 
         configRecycler();
+        adapter = new HomeAdapter(new LinkedList<>());
+        recyclerView.setAdapter(adapter);
         loadUpcomingMoviews(1);
     }
 
@@ -47,23 +52,21 @@ public class HomeActivity extends AppCompatActivity {
         recyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(manager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
-                Toast.makeText(getBaseContext(), "page. " + page, Toast.LENGTH_SHORT).show();
-                //loadUpcomingMoviews(page);
+                loadUpcomingMoviews(page);
             }
         });
     }
 
     private void loadUpcomingMoviews(long page) {
         disposableObserver = viewModel.getUpcomingMovies(page).subscribeWith(new DisposableObserver<List<Movie>>() {
-            HomeAdapter adapter;
             @Override
             public void onNext(List<Movie> movies) {
-                recyclerView.setAdapter(adapter = new HomeAdapter(movies));
+                adapter.addMovies(movies);
             }
 
             @Override
             public void onError(Throwable e) {
-                e.printStackTrace(); // todo treat error correctly
+                e.printStackTrace();
             }
 
             @Override

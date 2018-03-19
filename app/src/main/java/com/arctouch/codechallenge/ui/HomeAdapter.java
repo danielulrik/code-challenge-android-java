@@ -27,6 +27,13 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.ViewHolder> {
         this.movies = movies;
     }
 
+    public void addMovies(List<Movie> movies) {
+        if (movies != null && !movies.isEmpty()) {
+            this.movies.addAll(movies);
+            notifyDataSetChanged();
+        }
+    }
+
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         private final MovieImageUrlBuilder movieImageUrlBuilder = new MovieImageUrlBuilder();

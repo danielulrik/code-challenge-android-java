@@ -6,6 +6,10 @@ public class GenreResponse {
 
     public List<Genre> genres;
 
+    public GenreResponse(List<Genre> genres) {
+        this.genres = genres;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
