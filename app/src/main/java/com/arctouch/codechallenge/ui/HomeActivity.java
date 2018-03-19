@@ -37,6 +37,7 @@ public class HomeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home_activity);
         ButterKnife.bind(this);
+
         configRecycler();
         loadUpcomingMoviews(1);
     }
